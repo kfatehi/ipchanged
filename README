@@ -15,9 +15,8 @@ Instructions:
 Usage:
   The script is super simple and takes no arguments, you run it like so:
   ./ipchanged.rb
-  To set up your system to check and update periodically, set it up to run with cron, which would need a command like this:
-  15 * * * * su - yourusername -c /path/to/ipchanged.rb
-  I am doing the su way in case you are using RVM and it needs to get sourced, customize to your needs, might not be necessary, nor necessarily correct!
+  To set up your system to check and update periodically, set it up to run with cron, which would use a command like this:
+  */15 * * * * su - yourusername -c "/path/to/ipchanged.rb"
   
 Disclaimer:
   This script edits /etc/hosts file as root! Use with caution. I'm not responsible if something bad happens!
