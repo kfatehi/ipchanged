@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# Set for use with cron
 require 'rubygems'
 require 'logger'
 require 'yaml'
@@ -16,13 +17,11 @@ def do_start
   begin
     @ip = open("http://www.whatismyip.com/automation/n09230945.asp").read
     raise "Got invalid IP, trying again in 10 minutes" if !@ip.match(IPREGEX)
+    do_check    
   rescue Exception => ex
     @log.error ex.backtrace
     @log.error "Couldn't interface with whatismyip.com"
-    sleep 10*60
-    do_start
   end
-  do_check
 end
 def do_update
   @entries = []
@@ -52,7 +51,7 @@ def do_update
     return true
   rescue Exception => ex
     @log.error ex.backtrace
-    @log.error "Could not SSH. Did you fix the public key?"
+    @log.error "Could not SSH. Did you install your public key?"
     return false
   end
 end
@@ -64,7 +63,5 @@ def do_check
     @SET["slave"] = @ip # Set the slave IP in the settings to current IP
     File.open("#{FILESDIR}/settings.yaml", "w") {|f| f.write @SET.to_yaml} if do_update
   end
-  sleep 15*60
-  do_start
 end
 do_start
