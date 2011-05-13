@@ -9,12 +9,15 @@ Instructions:
   1) Place the public key of the slave into the ~/.ssh/authorized_keys folder for the master's root user (unless some other user can edit /etc/hosts)
   2) Remove any existing mentions of the slave from your master hosts file.
   3) Open the config file and enter a host or ip address for master. Leave slave blank!
-  4) Run the script for the first time. It will add your slave's current IP to the master's hosts file in a proper format. The script will maintain this by checking if it has changed every 15 minutes using whatismyip.com's API.  
+  4) Run the script for the first time. It will add your slave's current IP to the master's hosts file in a proper format. The script will maintain this by checking if it has changed every 15 minutes using whatismyip.com's API. 
   NOTE: I designed it to support multiple independent slaves on one master, but I haven't tested that.
   
 Usage:
-  The script is super simple and takes no arguments, you start it just like this, in background mode:
-  ./ipchanged.rb &
+  The script is super simple and takes no arguments, you run it like so:
+  ./ipchanged.rb
+  To set up your system to check and update periodically, set it up to run with cron, which would need a command like this:
+  15 * * * * su - yourusername -c /path/to/ipchanged.rb
+  I am doing the su way in case you are using RVM and it needs to get sourced, customize to your needs, might not be necessary, nor necessarily correct!
   
 Disclaimer:
   This script edits /etc/hosts file as root! Use with caution. I'm not responsible if something bad happens!
