@@ -5,7 +5,7 @@ require 'logger'
 require 'yaml'
 require 'open-uri'
 require 'net/ssh'
-@log = Logger.new("log.txt")
+@log = Logger.new("ipchanged.log")
 @log.level = Logger::INFO
 FILESDIR = File.expand_path(File.dirname(__FILE__))
 HOSTFILEREGEX = /#ipchanged-begin\n(.*)\n#ipchanged-end/m
