@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
-# Set for use with cron
+FILESDIR = File.expand_path(File.dirname(__FILE__))
+HOSTFILEREGEX = /#ipchanged-begin\n(.*)\n#ipchanged-end/m
+IPREGEX = /\b(?:\d{1,3}\.){3}\d{1,3}\b/
+# For use with cron
 require 'rubygems'
 require 'logger'
 require 'yaml'
 require 'open-uri'
 require 'net/ssh'
-@log = Logger.new("ipchanged.log")
+@log = Logger.new("#{FILESDIR}/ipchanged.log")
 @log.level = Logger::INFO
-FILESDIR = File.expand_path(File.dirname(__FILE__))
-HOSTFILEREGEX = /#ipchanged-begin\n(.*)\n#ipchanged-end/m
-IPREGEX = /\b(?:\d{1,3}\.){3}\d{1,3}\b/
 def do_start
   @SET = YAML::load File.open("#{FILESDIR}/settings.yaml")
   @log.error "No master address specified. Fix that." if @SET["master"].nil?
