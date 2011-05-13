@@ -6,10 +6,11 @@ require 'open-uri'
 require 'net/ssh'
 @log = Logger.new("log.txt")
 @log.level = Logger::INFO
+FILESDIR = File.expand_path(File.dirname(__FILE__))
 HOSTFILEREGEX = /#ipchanged-begin\n(.*)\n#ipchanged-end/m
 IPREGEX = /\b(?:\d{1,3}\.){3}\d{1,3}\b/
 def do_start
-  @SET = YAML::load File.open("settings.yaml")
+  @SET = YAML::load File.open("#{FILESDIR}/settings.yaml")
   @log.error "No master address specified. Fix that." if @SET["master"].nil?
   @hostname = `hostname`.strip
   begin
@@ -61,7 +62,7 @@ def do_check
   else
     @log.info "IP has changed (was #{@SET["slave"]}, now is: #{@ip})"
     @SET["slave"] = @ip # Set the slave IP in the settings to current IP
-    File.open("settings.yaml", "w") {|f| f.write @SET.to_yaml} if do_update
+    File.open("#{FILESDIR}/settings.yaml", "w") {|f| f.write @SET.to_yaml} if do_update
   end
   sleep 15*60
   do_start
