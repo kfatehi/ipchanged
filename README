@@ -17,6 +17,9 @@ Usage:
   ./ipchanged.rb
   To set up your system to check and update periodically, set it up to run with cron, which would use a command like this:
   */15 * * * * su - yourusername -c "/path/to/ipchanged.rb"
+
+Example Cron:
+  */15 * * * * su - keyvan -c "ruby /opt/ipchanged/ipchanged.rb"
   
 Disclaimer:
   This script edits /etc/hosts file as root! Use with caution. I'm not responsible if something bad happens!
