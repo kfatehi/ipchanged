@@ -15,12 +15,11 @@ def do_start
   @log.error "No master address specified. Fix that." if @SET["master"].nil?
   @hostname = `hostname`.strip
   begin
-    @ip = open("http://www.whatismyip.com/automation/n09230945.asp").read
-    raise "Got invalid IP, trying again in 10 minutes" if !@ip.match(IPREGEX)
+    @ip = open("http://automation.whatismyip.com/n09230945.asp").read
+    raise "Received an invalid IP address... Try again later." if !@ip.match(IPREGEX)
     do_check    
   rescue Exception => ex
-    @log.error ex.backtrace
-    @log.error "Couldn't interface with whatismyip.com"
+    @log.error ex.message
   end
 end
 def do_update
