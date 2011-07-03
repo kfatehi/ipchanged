@@ -13,7 +13,7 @@ require 'net/ssh'
 def do_start
   @SET = YAML::load File.open("#{FILESDIR}/settings.yaml")
   @log.error "No master address specified. Fix that." if @SET["master"].nil?
-  @hostname = `hostname`.strip
+  @hostname = (@SET['name'] ? @SET['name'] : `hostname`.strip)
   begin
     @ip = open("http://automation.whatismyip.com/n09230945.asp").read
     raise "Received an invalid IP address... Try again later." if !@ip.match(IPREGEX)
@@ -55,11 +55,11 @@ def do_update
   end
 end
 def do_check
-  if @SET["slave"] == @ip
+  if @SET["lastip"] == @ip
     @log.debug "IP hasn't changed, I'll check again in 15 minutes."
   else
     @log.info "IP has changed (was #{@SET["slave"]}, now is: #{@ip})"
-    @SET["slave"] = @ip # Set the slave IP in the settings to current IP
+    @SET["lastip"] = @ip # Set the slave IP in the settings to current IP
     File.open("#{FILESDIR}/settings.yaml", "w") {|f| f.write @SET.to_yaml} if do_update
   end
 end

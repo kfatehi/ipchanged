@@ -1,5 +1,6 @@
 Description:
-  This script is run on a server (slave) with a non-static IP address. It will periodically check the IP address and, if it has changed, will connect to the server (master) that maintains a record of the slave's IP via SSH and update the /etc/hosts file with the slave's IP and hostname.
+  This script is run on a computer (slave) with a non-static IP address. 
+  It will check the IP address and, if it has changed, will connect to the server (master) that maintains a record of the slave's IP via SSH and update the /etc/hosts file with the slave's IP and hostname.
 
 Definitions:
   Master: A server that contains the slave's IP address in its /etc/hosts file (for easy use in Apache proxies, etc). The master has a static IP address.
@@ -8,9 +9,12 @@ Definitions:
 Instructions:
   1) Place the public key of the slave into the ~/.ssh/authorized_keys folder for the master's root user (unless some other user can edit /etc/hosts)
   2) Remove any existing mentions of the slave from your master hosts file.
-  3) Open the config file and enter a host or ip address for master. Leave slave blank!
-  4) Run the script for the first time. It will add your slave's current IP to the master's hosts file in a proper format. The script will maintain this by checking if it has changed every 15 minutes using whatismyip.com's API. 
-  NOTE: I designed it to support multiple independent slaves on one master, but I haven't tested that.
+  3) Open the settings.yaml and fill the fields:
+    master: and enter the hostname or ip address for master server.
+    name: enter a hostname you want the master to use in its hosts file for this computer
+    lastip: leave this blank, it is used to determine if the master should be updated.
+  4) Run the script for the first time. It will add your slave's current IP to the master's hosts file in a proper format. You can run it again and again (see the cron entry below) and it will simply update if your ip has changed.
+  NOTE: It is designed to support multiple independent slaves on one master, but that's untested.
   
 Usage:
   The script is super simple and takes no arguments, you run it like so:
